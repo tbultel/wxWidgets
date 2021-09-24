@@ -2979,7 +2979,7 @@ static gboolean source_dispatch(GSource*, GSourceFunc, void*)
 }
 }
 
-#if wxGTK_HAS_GESTURES_SUPPORT
+#ifdef wxGTK_HAS_GESTURES_SUPPORT
 
 // Currently used for Press and Tap gesture only
 enum GestureStates
