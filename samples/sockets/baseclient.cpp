@@ -26,7 +26,7 @@
 #include "wx/timer.h"
 #include "wx/thread.h"
 
-const wxEventType wxEVT_WORKER = wxNewEventType();
+const wxEventType wxEVT_WORKER = wxNewEventType((char*) "wxEVT_WORKER");
 #define EVT_WORKER(func) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WORKER, -1, -1, (wxObjectEventFunction) (wxEventFunction) (WorkerEventFunction) & func, (wxObject *) NULL ),
 
 const int timeout_val = 1000;

@@ -24,6 +24,8 @@
 #include "wx/eventfilter.h"
 #include "wx/evtloop.h"
 
+//
+
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/log.h"
@@ -161,7 +163,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule);
 
 const wxEventType wxEVT_FIRST = 10000;
 const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
-const wxEventType wxEVT_NULL = wxNewEventType();
+const wxEventType wxEVT_NULL = wxNewEventType( (char*) "wxEVT_NULL" );
 
 wxDEFINE_EVENT( wxEVT_IDLE, wxIdleEvent );
 
@@ -349,13 +351,38 @@ wxIdleMode wxIdleEvent::sm_idleMode = wxIDLE_PROCESS_ALL;
 // event initialization
 // ----------------------------------------------------------------------------
 
-int wxNewEventType()
+typedef struct { 
+    int id; 
+    char * name; } EVENT_ENTRY;
+
+EVENT_ENTRY eventTable[2048];
+
+int wxNewEventType( char * name)
 {
     // MT-FIXME
     static int s_lastUsedEventType = wxEVT_FIRST;
+    static int cpt = 0;
+
+    //fprintf(stderr, "Event %d -> %s\n", s_lastUsedEventType, name);
+
+    eventTable[cpt].id = s_lastUsedEventType;
+    eventTable[cpt].name = (name==NULL?(char*)"X":strdup(name));
+
+    cpt++;
 
     return s_lastUsedEventType++;
 }
+
+
+char * eventNameLookup(int id) {
+    for (int ix=0; ix<2048; ix++) {
+        //fprintf(stderr, "%d look %d, (%d, %s)\n", ix, id, eventTable[id].name,eventTable[ix].name);
+        if (eventTable[ix].id == id)
+            return eventTable[ix].name;
+    }
+    return NULL;
+}
+
 // ----------------------------------------------------------------------------
 // wxEventFunctor
 // ----------------------------------------------------------------------------
@@ -1285,6 +1312,9 @@ bool wxEvtHandler::ProcessThreadEvent(const wxEvent& event)
 void wxEvtHandler::QueueEvent(wxEvent *event)
 {
     wxCHECK_RET( event, "NULL event can't be posted" );
+
+    int t = event->GetEventType();
+    const char * name = eventNameLookup(t);
 
     if (!wxTheApp)
     {

@@ -19,7 +19,7 @@
 // test events and their handlers
 // ----------------------------------------------------------------------------
 
-const wxEventType LegacyEventType = wxNewEventType();
+const wxEventType LegacyEventType = wxNewEventType((char*)"LegacyEventType");
 
 class MyEvent;
 wxDEFINE_EVENT(MyEventType, MyEvent);

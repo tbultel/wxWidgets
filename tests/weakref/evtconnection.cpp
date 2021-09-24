@@ -26,9 +26,9 @@ static wxObject *gs_psrc1;
 static wxObject *gs_psrc2;
 
 // We need some event types
-const wxEventType wxEVT_TEST = wxNewEventType(),
-                  wxEVT_TEST1 = wxNewEventType(),
-                  wxEVT_TEST2 = wxNewEventType();
+const wxEventType wxEVT_TEST = wxNewEventType((char*) "wxEVT_TEST"),
+                  wxEVT_TEST1 = wxNewEventType((char*) "wxEVT_TEST1"),
+                  wxEVT_TEST2 = wxNewEventType((char*) "wxEVT_TEST2");
 
 class wxTestEvent : public wxEvent
 {

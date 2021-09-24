@@ -4919,7 +4919,7 @@ wxEventType wxEVT_ANY;
     Usually this function is only used by wxDEFINE_EVENT() and not called
     directly.
 */
-wxEventType wxNewEventType();
+wxEventType wxNewEventType(char * name);
 
 /**
     Define a new event type associated with the specified event class.

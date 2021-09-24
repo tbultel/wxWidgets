@@ -90,15 +90,18 @@ typedef int wxEventType;
     wxEventTableEntry(wxEVT_NULL, 0, 0, NULL, NULL)
 
 // generate a new unique event type
-extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
+extern WXDLLIMPEXP_BASE wxEventType wxNewEventType(char * name);
 
 // events are represented by an instance of wxEventTypeTag and the
 // corresponding type must be specified for type-safety checks
 
+#define xstr(s) __str(s)
+#define __str(s) #s
+
 // define a new custom event type, can be used alone or after event
 // declaration in the header using one of the macros below
 #define wxDEFINE_EVENT( name, type ) \
-    const wxEventTypeTag< type > name( wxNewEventType() )
+    const wxEventTypeTag< type > name( wxNewEventType( (char*)__str(name) ) )
 
 // the general version allowing exporting the event type from DLL, used by
 // wxWidgets itself
@@ -4799,7 +4802,7 @@ WXDLLIMPEXP_CORE wxWindow* wxFindFocusDescendant(wxWindow* ancestor);
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, name, value)
 #define DECLARE_LOCAL_EVENT_TYPE(name, value) \
     DECLARE_EXPORTED_EVENT_TYPE(wxEMPTY_PARAMETER_VALUE, name, value)
-#define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
+#define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType((char*)name);
 #define DEFINE_LOCAL_EVENT_TYPE(name) DEFINE_EVENT_TYPE(name)
 
 // alias for backward compatibility with 2.9.0:
